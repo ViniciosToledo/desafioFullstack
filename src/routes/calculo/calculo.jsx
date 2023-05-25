@@ -4,14 +4,7 @@ import calculosDB from '../../services/firebaseConfig';
 import './calculo.css'
 
 function Calculo() {
-
-  const [calculos, setCalculos] = useState([])
-  const [comprimentoPainel, setComprimentoPainel] = useState(0)
-  const [larguraPainel, setLarguraPainel] = useState(0)
-  const [potenciaPainel, setPotenciaPainel] = useState(0)
-  const [placasPorInversor, setPlacasPorInversor] = useState(0)
-  const [potenciaMaxima, setPotenciaMaxima] = useState(0)
-
+  
   useEffect(()=>{
     const getCalculos = async () => {
       const data = await getDocs(calculosDB)
@@ -19,6 +12,37 @@ function Calculo() {
     }
     getCalculos()
   },[])
+
+  const [calculos, setCalculos] = useState([])
+
+  function calcularSistema(POTENCIA_PAINEL,COMPRIMENTO_PAINEL,POTENCIA_TOTAL,LARGURA_PAINEL,MAXIMO_PLACAS_POR_INVERSOR) {
+  
+    const potenciaPorPlaca = POTENCIA_PAINEL / 1000; // Potência por placa em KW
+    const quantidadePlacas = Math.ceil(POTENCIA_TOTAL / potenciaPorPlaca); // Quantidade de placas necessárias
+    const quantidadeInversores = Math.ceil(quantidadePlacas / MAXIMO_PLACAS_POR_INVERSOR); // Quantidade de inversores necessários
+    const comprimentoEstrutura = quantidadePlacas * COMPRIMENTO_PAINEL; // Comprimento da estrutura necessária
+    const areaUtil = quantidadePlacas * COMPRIMENTO_PAINEL * LARGURA_PAINEL; // Área útil necessária
+  
+    return {
+      quantidadePlacas,
+      quantidadeInversores,
+      potenciaPainel: POTENCIA_PAINEL,
+      comprimentoEstrutura,
+      areaUtil
+    };
+  }
+
+  function calcular(e){
+    e.preventDefault()
+    const inputComprimento = parseFloat(document.querySelector('#comprimetoPainel').value)
+    const inputLargura = parseFloat(document.querySelector('#larguraPainel').value)
+    const inputPotencia = parseFloat(document.querySelector('#potenciaPainel').value)
+    const inputPlacasPorInversor = parseFloat(document.querySelector('#placasPorInversor').value)
+    const inputPotenciaTotal = parseFloat(document.querySelector('#potenciaTotal').value)
+
+    const resultado =calcularSistema(inputPotencia, inputComprimento, inputPotenciaTotal, inputLargura, inputPlacasPorInversor)
+    return resultado
+  }
 
 
   return (
@@ -51,8 +75,7 @@ function Calculo() {
             <input type="number" name="potenciaTotal" id="potenciaTotal" placeholder='4.5KW' />
           </div>
 
-          <button>Calcular</button>
-
+          <button onClick={calcular}>Calcular</button>
         </form>
       </div>
     </>
