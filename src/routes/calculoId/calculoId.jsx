@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { getDocs } from "firebase/firestore";
 import calculosDB from "../../services/firebaseConfig";
 import { useEffect, useState } from "react";
+import './calculoId.css'
 
 
 function CalculoId() {
@@ -27,14 +28,33 @@ function CalculoId() {
     return (
       <>
       {calculoFiltrado&&(
-        <ul>
-          <li>{console.log(calculoFiltrado)}</li>
-          <li>{calculoFiltrado.areaUtil}</li>
-          <li>{calculoFiltrado.comprimentoEstrutura}</li>
-          <li>{calculoFiltrado.potenciaPainel}</li>
-          <li>{calculoFiltrado.quantidadeInversores}</li>
-          <li>{calculoFiltrado.quantidadePlacas}</li>
-        </ul>
+        <div className="container-infos">
+          <strong>ID: {id}</strong>
+
+          <ol class="alternating-colors">
+            <li>
+              <strong>Area ultil:</strong>
+              <p>{calculoFiltrado.areaUtil}m²</p>
+            </li>
+            <li>
+              <strong>Comprimento Necessario:</strong>
+              <p>{calculoFiltrado.comprimentoEstrutura}m²</p>
+            </li>
+            <li>
+              <strong>Potencia do Painel:</strong>
+              <p>{calculoFiltrado.potenciaPainel}W</p>
+            </li>
+            <li>
+              <strong>Quantidade de Inversores:</strong>
+              <p>{calculoFiltrado.quantidadeInversores}</p>
+            </li>
+            <li>
+              <strong>Quantidade de Placas Solares:</strong>
+              <p>{calculoFiltrado.quantidadePlacas}</p>
+            </li>
+          </ol>
+        </div>
+        
       )}
       </>
     )
