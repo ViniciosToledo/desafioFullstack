@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import './calculo.css'
+import calculosDB from '../../services/firebaseConfig'
+import { addDoc } from 'firebase/firestore'
 
 function Calculo() {
 
@@ -20,6 +22,8 @@ function Calculo() {
     const quantidadeInversores = Math.ceil(quantidadePlacas / MAXIMO_PLACAS_POR_INVERSOR); // Quantidade de inversores necessários
     const comprimentoEstrutura = quantidadePlacas * COMPRIMENTO_PAINEL; // Comprimento da estrutura necessária
     const areaUtil = quantidadePlacas * COMPRIMENTO_PAINEL * LARGURA_PAINEL; // Área útil necessária
+
+    postFirebase(quantidadePlacas, quantidadeInversores, potenciaPainel, comprimentoEstrutura, areaUtil)
   
     return {
       quantidadePlacas,
@@ -36,12 +40,24 @@ function Calculo() {
     
     if (comprimentoPainel>0 && larguraPainel>0 && potenciaPainel>0 && placasPorInversor>0 && potenciaSistema>0) {
       setResultado(calcularSistema(potenciaPainel, comprimentoPainel, potenciaSistema, larguraPainel, placasPorInversor))
+      
       setValidator(false)
     }
     
     else{
       setValidator(true)
     }
+  }
+
+  //Função para inserir os dados no FireBase
+  async function postFirebase(quantidadePlacas, quantidadeInversores, potenciaPainel, comprimentoEstrutura, areaUtil){
+    const calculo = await addDoc(calculosDB, {
+      quantidadePlacas,
+      quantidadeInversores,
+      potenciaPainel,
+      comprimentoEstrutura,
+      areaUtil,
+    })
   }
   
   
