@@ -44,7 +44,7 @@ input{
 }
 
 h1{
-    margin-bottom: 1.5em;
+    margin-bottom: .6em;
     color: black;
 }
 
@@ -54,4 +54,8 @@ button{
     border-radius: 10px;
     border: 1px solid;
     background-color: #7c8071;
+}
+
+.resultadoContainer{
+    text-align: center;
 }

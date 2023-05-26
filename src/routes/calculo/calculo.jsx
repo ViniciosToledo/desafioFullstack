@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react'
-import { getDocs } from "firebase/firestore";
-import calculosDB from '../../services/firebaseConfig';
+import { useState } from 'react'
 import './calculo.css'
 
 function Calculo() {
-  
-  useEffect(()=>{
-    const getCalculos = async () => {
-      const data = await getDocs(calculosDB)
-      setCalculos(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-    }
-    getCalculos()
-  },[])
 
-  const [calculos, setCalculos] = useState([])
-
+  //Variaveis usadas para calcular o sistema
+  const [resultado, setResultado] = useState()
+  const [comprimentoPainel, setComprimentoPainel] = useState()
+  const [larguraPainel, setLarguraPainel] = useState()
+  const [potenciaPainel, setPotenciaPainel] = useState()
+  const [placasPorInversor, setPlacasPorInversor] = useState()
+  const [potenciaSistema, setPotenciaSistema] = useState()
+  const [validator, setValidator] = useState(false)
+   
+  //Função responsavel pelo calculo do sistema
   function calcularSistema(POTENCIA_PAINEL,COMPRIMENTO_PAINEL,POTENCIA_TOTAL,LARGURA_PAINEL,MAXIMO_PLACAS_POR_INVERSOR) {
   
     const potenciaPorPlaca = POTENCIA_PAINEL / 1000; // Potência por placa em KW
@@ -31,20 +29,22 @@ function Calculo() {
       areaUtil
     };
   }
-
-  function calcular(e){
+  
+  //Função que captura os dados do formulario e chama a função de calculo do sistema 
+  function capturarInputs(e){
     e.preventDefault()
-    const inputComprimento = parseFloat(document.querySelector('#comprimetoPainel').value)
-    const inputLargura = parseFloat(document.querySelector('#larguraPainel').value)
-    const inputPotencia = parseFloat(document.querySelector('#potenciaPainel').value)
-    const inputPlacasPorInversor = parseFloat(document.querySelector('#placasPorInversor').value)
-    const inputPotenciaTotal = parseFloat(document.querySelector('#potenciaTotal').value)
-
-    const resultado =calcularSistema(inputPotencia, inputComprimento, inputPotenciaTotal, inputLargura, inputPlacasPorInversor)
-    return resultado
+    
+    if (comprimentoPainel>0 && larguraPainel>0 && potenciaPainel>0 && placasPorInversor>0 && potenciaSistema>0) {
+      setResultado(calcularSistema(potenciaPainel, comprimentoPainel, potenciaSistema, larguraPainel, placasPorInversor))
+      setValidator(false)
+    }
+    
+    else{
+      setValidator(true)
+    }
   }
-
-
+  
+  
   return (
     <>
       <div className='formContainer'>
@@ -52,31 +52,46 @@ function Calculo() {
         <form>
           <div className='inputContainer'>
             <label htmlFor="comprimetoPainel" className='comprimetoPainel'>Comprimento do Painel</label>
-            <input type="number" name="comprimetoPainel" id="comprimetoPainel" placeholder='10m' />
+            <input type="number" name="comprimetoPainel" id="comprimetoPainel" placeholder='10m' onChange={(e) => setComprimentoPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="larguraPainel">Largura do Painel</label>
-            <input type="number" name="larguraPainel" id="larguraPainel" placeholder='2m' />
+            <input type="number" name="larguraPainel" id="larguraPainel" placeholder='2m' onChange={(e) => setLarguraPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="potenciaPainel">Potencia do Painel</label>
-            <input type="number" name="potenciaPainel" id="potenciaPainel" placeholder='550W' />
+            <input type="number" name="potenciaPainel" id="potenciaPainel" placeholder='550W' onChange={(e) => setPotenciaPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="placasPorInversor">Placas por Inversor</label>
-            <input type="number" name="placasPorInversor" id="placasPorInversor" placeholder='4' />
+            <input type="number" name="placasPorInversor" id="placasPorInversor" placeholder='4' onChange={(e) => setPlacasPorInversor(e.target.value)} />
           </div>
 
           <div className='inputContainer'>
             <label htmlFor="potenciaTotal">Potencia do Sistema</label>
-            <input type="number" name="potenciaTotal" id="potenciaTotal" placeholder='4.5KW' />
+            <input type="number" name="potenciaTotal" id="potenciaTotal" placeholder='4.5KW' onChange={(e) => setPotenciaSistema(e.target.value)} />
           </div>
 
-          <button onClick={calcular}>Calcular</button>
+          <button onClick={capturarInputs}>Calcular</button>
         </form>
+          {resultado && (
+            <div className='resultadoContainer'>
+              <p>Placas necessarias: {resultado.quantidadePlacas}</p>
+              <p>Inversores necessarios: {resultado.quantidadeInversores}</p>
+              <p>Paineis com potencia de: {resultado.potenciaPainel}</p>
+              <p>O comprimento da estrutura sera de: {resultado.comprimentoEstrutura}m</p>
+              <p>A area da estrutura sera de: {resultado.areaUtil}m</p>
+            </div>
+          )}
+          
+          {validator && (
+            <div className='errorMessage'>
+              <p>Por favor preencha todos os campos corretamente</p>
+            </div>
+          )}
       </div>
     </>
   )
