@@ -19,8 +19,8 @@
   }
 
 
-ol { padding-left: 50px; }
-li { 
+.alternating-colors { padding-left: 50px; }
+.item-list { 
   color: #4F4F4F; 
   padding-left: 16px;
   margin-top: 24px;
@@ -41,8 +41,8 @@ li {
   }
 }
 
-strong { color: #292929; }
+.bold { color: #292929; }
 
 
-li:nth-child(odd):before { border-color: #0BAD02; }
-li:nth-child(even):before { border-color: #2378D5; }
+.item-list:nth-child(odd):before { border-color: #0BAD02; }
+.item-list:nth-child(even):before { border-color: #2378D5; }

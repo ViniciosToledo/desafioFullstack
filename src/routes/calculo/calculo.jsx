@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './calculo.css'
 import calculosDB from '../../services/firebaseConfig'
 import { addDoc } from 'firebase/firestore'
+import ListaDeCalculos from '../../components/listaDeCalculos'
 
 function Calculo() {
 
@@ -64,34 +65,34 @@ function Calculo() {
   return (
     <>
       <div className='formContainer'>
-        <h1>Simule seu Projeto</h1>
-        <form>
+        <h1 className='titulo'>Simule seu Projeto</h1>
+        <form className='formulario'>
           <div className='inputContainer'>
             <label htmlFor="comprimetoPainel" className='comprimetoPainel'>Comprimento do Painel</label>
-            <input type="number" name="comprimetoPainel" id="comprimetoPainel" placeholder='10m' onChange={(e) => setComprimentoPainel(e.target.value)} />
+            <input className='formulario-input' type="number" name="comprimetoPainel" id="comprimetoPainel" placeholder='10m' onChange={(e) => setComprimentoPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="larguraPainel">Largura do Painel</label>
-            <input type="number" name="larguraPainel" id="larguraPainel" placeholder='2m' onChange={(e) => setLarguraPainel(e.target.value)} />
+            <input className='formulario-input' type="number" name="larguraPainel" id="larguraPainel" placeholder='2m' onChange={(e) => setLarguraPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="potenciaPainel">Potencia do Painel</label>
-            <input type="number" name="potenciaPainel" id="potenciaPainel" placeholder='550W' onChange={(e) => setPotenciaPainel(e.target.value)} />
+            <input className='formulario-input' type="number" name="potenciaPainel" id="potenciaPainel" placeholder='550W' onChange={(e) => setPotenciaPainel(e.target.value)} />
           </div>
           
           <div className='inputContainer'>
             <label htmlFor="placasPorInversor">Placas por Inversor</label>
-            <input type="number" name="placasPorInversor" id="placasPorInversor" placeholder='4' onChange={(e) => setPlacasPorInversor(e.target.value)} />
+            <input className='formulario-input' type="number" name="placasPorInversor" id="placasPorInversor" placeholder='4' onChange={(e) => setPlacasPorInversor(e.target.value)} />
           </div>
 
           <div className='inputContainer'>
             <label htmlFor="potenciaTotal">Potencia do Sistema</label>
-            <input type="number" name="potenciaTotal" id="potenciaTotal" placeholder='4.5KW' onChange={(e) => setPotenciaSistema(e.target.value)} />
+            <input className='formulario-input' type="number" name="potenciaTotal" id="potenciaTotal" placeholder='4.5KW' onChange={(e) => setPotenciaSistema(e.target.value)} />
           </div>
 
-          <button onClick={capturarInputs}>Calcular</button>
+          <button className='form-button' onClick={capturarInputs}>Calcular</button>
         </form>
           {resultado && (
             <div className='resultadoContainer'>
@@ -109,6 +110,7 @@ function Calculo() {
             </div>
           )}
       </div>
+      <ListaDeCalculos/>
     </>
   )
 }
